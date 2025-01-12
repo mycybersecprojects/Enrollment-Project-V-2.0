@@ -4,6 +4,7 @@ $lastModified = "2025-01-12"          # Update this when you modify the script
 $today = Get-Date                     # Get the current date
 $elapsedTime = (New-TimeSpan -Start $createdDate -End $today).Days
 
+# Display script metadata
 Write-Host "=========================="
 Write-Host "Enrollment Project"
 Write-Host "Created by: Erkam Koca"
@@ -13,7 +14,17 @@ Write-Host "Today's Date: $($today.ToString('yyyy-MM-dd'))"
 Write-Host "This script has been running for $elapsedTime days since its creation."
 Write-Host "=========================="
 
-# Show how long the computer has been awake (local only)
+# Function: Log-Action (for logging actions)
+function Log-Action {
+    param (
+        [string]$ActionMessage
+    )
+    $logPath = "$PSScriptRoot\ActionLog.txt"
+    $logEntry = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') - $ActionMessage"
+    Add-Content -Path $logPath -Value $logEntry
+}
+
+# Function: Show how long the computer has been awake (local only)
 function Show-ComputerUptime {
     try {
         # Retrieve local computer name and last boot time
@@ -35,24 +46,8 @@ function Show-ComputerUptime {
         Write-Host "Error: Unable to retrieve local uptime." -ForegroundColor Red
         Log-Action "Failed to retrieve local uptime."
     }
-# Attribution and Version
-$createdDate = Get-Date "2025-01-12"  # Replace this with the creation date of your script
-$lastModified = "2025-01-12"          # Update this when you modify the script
-$today = Get-Date                     # Get the current date
-$elapsedTime = (New-TimeSpan -Start $createdDate -End $today).Days
-
-Write-Host "=========================="
-Write-Host "Enrollment Project"
-Write-Host "Created by: Erkam Koca"
-Write-Host "Version: 1.2.0 (Updated)"
-Write-Host "Last Modified: $lastModified"
-Write-Host "Today's Date: $($today.ToString('yyyy-MM-dd'))"
-Write-Host "This script has been running for $elapsedTime days since its creation."
-Write-Host "=========================="
-
-# Display system uptime
-Show-ComputerUptime
 }
+
 # Function: Power Options Submenu
 function Show-PowerOptionsMenu {
     Write-Host "`nPower Options:"
@@ -151,26 +146,6 @@ function Change-PowerPlan {
         }
     } catch {
         Write-Host "Error: Unable to change the power plan." -ForegroundColor Red
-    }
-}
-
-# Function: Show how long the computer has been awake
-function Show-ComputerUptime {
-    try {
-        $lastBootTime = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
-        $uptime = New-TimeSpan -Start $lastBootTime -End (Get-Date)
-
-        $result = "The computer has been awake for: $($uptime.Days) days, $($uptime.Hours) hours, $($uptime.Minutes) minutes, and $($uptime.Seconds) seconds."
-        Write-Host $result
-
-        # Option to copy to clipboard
-        $copyChoice = Read-Host "Press 'C' to copy the result to clipboard or any key to continue"
-        if ($copyChoice -ieq 'C') {
-            $result | Set-Clipboard
-            Write-Host "Result copied to clipboard."
-        }
-    } catch {
-        Write-Host "Error: Unable to retrieve system uptime." -ForegroundColor Red
     }
 }
 
