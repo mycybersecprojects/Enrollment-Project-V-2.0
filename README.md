@@ -85,6 +85,6 @@ The **Enrollment Project** is a comprehensive PowerShell script designed to stre
 
 ## Credits
 - **Author**: Erkam Koca
-- **Version**: 1.0.0
+- **Version**: 2.0.0
 - **Last Modified**: January 12, 2025
 
